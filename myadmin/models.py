@@ -58,5 +58,3 @@ class ExhaustedAttr(models.Model):
 class Exhausted(models.Model):
     goods = models.ForeignKey(Goods,on_delete=models.CASCADE,verbose_name="商品")
     attr = models.ManyToManyField(Attr,through=ExhaustedAttr)
-
-

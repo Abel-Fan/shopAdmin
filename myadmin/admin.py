@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category,Attr,AttrChoice,Goods,Exhausted
+from .models import Category,Attr,AttrChoice,Goods,Exhausted,ExhaustedAttr
 from django.utils.html import format_html
 
 def get_con(obj):
@@ -32,6 +32,20 @@ class GoodsAdmin(admin.ModelAdmin):
     def get_img(self,obj):
         return format_html("<img src='/static/%s' width='100' height='50'>"%obj.img)
 
+class AttrInline(admin.TabularInline):
+    model = ExhaustedAttr
+
+
+
+# 库存
 @admin.register(Exhausted)
 class ExhaustedAdmin(admin.ModelAdmin):
-   pass
+    inlines = [
+        AttrInline,
+    ]
+    list_display = ('goods',"get_attr")
+    def get_attr(self,obj):
+        str1 = ""
+        for item in obj.exhaustedattr_set.filter(exhausted=obj.id):
+            str1+="%s:%s  、 "%(item.attr,item.attrchoice)
+        return str1
